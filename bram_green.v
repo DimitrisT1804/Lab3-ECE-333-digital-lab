@@ -32,6 +32,11 @@
    //       1     |  "36Kb"   |    32768    |   15-bit   |    1-bit   //
    //       1     |  "18Kb"   |    16384    |   14-bit   |    1-bit   //
    /////////////////////////////////////////////////////////////////////
+   module bram_green(addr, clk, reset, we, regce, en, di, do);
+
+   input clk, reset, we, regce, en, di;
+   input[13:0] addr;
+   output do;
 
    BRAM_SINGLE_MACRO #(
       .BRAM_SIZE("18Kb"), // Target BRAM, "18Kb" or "36Kb" 
@@ -40,17 +45,17 @@
       .INIT(36'h000000000), // Initial values on output port
       .INIT_FILE ("NONE"),
       .WRITE_WIDTH(1), // Valid values are 1-72 (37-72 only valid when BRAM_SIZE="36Kb")
-      .READ_WIDTH(0),  // Valid values are 1-72 (37-72 only valid when BRAM_SIZE="36Kb")
+      .READ_WIDTH(1),  // Valid values are 1-72 (37-72 only valid when BRAM_SIZE="36Kb")
       .SRVAL(36'h000000000), // Set/Reset value for port output
       .WRITE_MODE("WRITE_FIRST"), // "WRITE_FIRST", "READ_FIRST", or "NO_CHANGE" 
-      .INIT_00(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
-      .INIT_01(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
-      .INIT_02(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
-      .INIT_03(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
-      .INIT_04(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
-      .INIT_05(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
-      .INIT_06(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
-      .INIT_07(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
+      .INIT_00(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),    // diavazei prota to LSB kai meta to MSB gia auto prota ta ff kai meta ta 00
+      .INIT_01(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),
+      .INIT_02(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),
+      .INIT_03(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),
+      .INIT_04(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),
+      .INIT_05(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),
+      .INIT_06(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),
+      .INIT_07(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),
       .INIT_08(256'hffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff),
       .INIT_09(256'hffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff),
       .INIT_0A(256'hffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff),
@@ -59,14 +64,14 @@
       .INIT_0D(256'hffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff),
       .INIT_0E(256'hffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff),
       .INIT_0F(256'hffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff),
-      .INIT_10(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
-      .INIT_11(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
-      .INIT_12(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
-      .INIT_13(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
-      .INIT_14(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
-      .INIT_15(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
-      .INIT_16(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
-      .INIT_17(256'h00000000000000000000000000000000ffffffffffffffffffffffffffffffff),
+      .INIT_10(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),
+      .INIT_11(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),
+      .INIT_12(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),
+      .INIT_13(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),
+      .INIT_14(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),
+      .INIT_15(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),
+      .INIT_16(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),
+      .INIT_17(256'hffffffffffffffffffffffffffffffff00000000000000000000000000000000),
       .INIT_18(256'h0000000000000000000000000000000000000000000000000000000000000000),
       .INIT_19(256'h0000000000000000000000000000000000000000000000000000000000000000),
       .INIT_1A(256'h0000000000000000000000000000000000000000000000000000000000000000),
@@ -194,15 +199,17 @@
       .INITP_0E(256'h0000000000000000000000000000000000000000000000000000000000000000),
       .INITP_0F(256'h0000000000000000000000000000000000000000000000000000000000000000)
    ) BRAM_SINGLE_MACRO_inst (
-      .DO(DO),       // Output data, width defined by READ_WIDTH parameter
-      .ADDR(ADDR),   // Input address, width defined by read/write port depth
-      .CLK(CLK),     // 1-bit input clock
-      .DI(DI),       // Input data port, width defined by WRITE_WIDTH parameter
-      .EN(EN),       // 1-bit input RAM enable
-      .REGCE(REGCE), // 1-bit input output register enable
-      .RST(RST),     // 1-bit input reset
-      .WE(WE)        // Input write enable, width defined by write port depth
+      .DO(do),       // Output data, width defined by READ_WIDTH parameter
+      .ADDR(addr),   // Input address, width defined by read/write port depth
+      .CLK(clk),     // 1-bit input clock
+      .DI(di),       // Input data port, width defined by WRITE_WIDTH parameter
+      .EN(en),       // 1-bit input RAM enable
+      .REGCE(regce), // 1-bit input output register enable
+      .RST(reset),     // 1-bit input reset
+      .WE(we)        // Input write enable, width defined by write port depth
    );
+
+   endmodule
 
    // End of BRAM_SINGLE_MACRO_inst instantiation
 				
