@@ -2,7 +2,7 @@
 module HSYNC_synchroniser(clk, reset, enable, hsync, hpixel);
 input clk, reset, enable;
 output reg hsync;
-output reg [7:0] hpixel;
+output reg [6:0] hpixel;
 
 reg [2:0] current_state, next_state;
 reg [11:0] counter;
@@ -147,12 +147,12 @@ end
 always @(posedge clk or posedge reset)
 begin
     if(reset)
-        hpixel <= 0;
+        hpixel <= 7'b0;
     else
     begin
         if(pixel_counter == 5'd19)
             //hpixel <= hpixel + 8'b1;
-            hpixel <= (hpixel == 8'd127) ? 0 : hpixel + 8'b1;
+            hpixel <= (hpixel == 7'd127) ? 0 : hpixel + 7'b1;
     end
 
     // if(hpixel == 8'd128)

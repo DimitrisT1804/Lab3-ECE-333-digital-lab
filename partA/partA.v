@@ -1,7 +1,7 @@
 //`define BRAM_SINGLE_MACRO(do, addr, clk, di, en, regce, rst, we) "bram_red"
 
-module VRAM(clk, reset, addr, we, regce, en, di, regce, red, green, blue);
-input clk, reset, we, regce, en, di, regce;
+module VRAM(clk, reset, addr, we, regce, en, di, red, green, blue);
+input clk, reset, we, regce, en, di;
 input [13:0] addr;
 output red, green, blue;
 
