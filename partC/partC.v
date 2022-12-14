@@ -1,6 +1,6 @@
 // VSYNC synchroniser
-module VSYNC_syncroniser(clk, reset, v_enable, vsync, vpixel, enable_hsync);
-input clk, reset, v_enable;
+module VSYNC_syncroniser(clk, reset, vsync, vpixel, enable_hsync, v_disp_on);
+input clk, reset;
 output reg vsync;
 output reg [6:0] vpixel;        // metritis pixels gia katakorifo ajona
 output reg enable_hsync;
@@ -9,6 +9,8 @@ reg [20:0] counter;
 reg [13:0] v_pixel_counter;
 reg [2:0] current_state, next_state;
 reg counter_enable, v_enable_pixels;
+
+output reg v_disp_on;
 
 
 parameter v_off = 3'b000,
@@ -27,19 +29,21 @@ begin
         current_state <= next_state;
 end
 
-always @(current_state or counter or v_enable)
+always @(current_state or counter or reset)
 begin
     vsync = 1;
     next_state = current_state;
     counter_enable = 1;
     v_enable_pixels = 0;
     enable_hsync = 0;
+    v_disp_on = 0;
 
     case(current_state) 
         v_off:
         begin
             counter_enable = 0;
-            if(v_enable == 1)
+            //if(v_enable == 1)
+            if(reset == 0)      // kanonika exo enable alla tha prepei na to vgalo se kapoio koumpi
                 next_state = v_pulse_width;
             else
                 next_state = current_state;
@@ -78,6 +82,7 @@ begin
 
         v_display_time:
         begin
+            v_disp_on = 1;
             v_enable_pixels = 1;
             //enable_hsync = 1;
             if(counter == 21'd1635199)  //den exo afairesei

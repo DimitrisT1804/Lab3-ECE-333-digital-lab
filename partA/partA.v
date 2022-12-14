@@ -5,7 +5,17 @@ input clk, reset, we, regce, en, di;
 input [13:0] addr;
 output red, green, blue;
 
-bram_red bram_red_inst
+// always @(posedge clk)
+// begin
+//     if( (v_disp_on == 0) || (h_disp_on == 0) )
+//     begin
+//         red <= 0;
+//         green <= 0;
+//         blue <= 0;
+//     end
+// end
+
+bram_red bram_red_inst      // genika i mnimi argei 1 periodo clk na vgalei output
 (
     .do(red),       // Output data, width defined by READ_WIDTH parameter
     .addr(addr),   // Input address, width defined by read/write port depth

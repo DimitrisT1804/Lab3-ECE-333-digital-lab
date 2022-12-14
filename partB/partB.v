@@ -1,5 +1,5 @@
 //part B
-module HSYNC_synchroniser(clk, reset, enable, hsync, hpixel);
+module HSYNC_synchroniser(clk, reset, enable, hsync, hpixel, h_disp_on);
 input clk, reset, enable;
 output reg hsync;
 output reg [6:0] hpixel;
@@ -8,6 +8,8 @@ reg [2:0] current_state, next_state;
 reg [11:0] counter;
 reg [4:0] pixel_counter;
 reg counter_enable, enable_pixels;
+
+output reg h_disp_on;
 
 parameter off_state = 3'b000,       //parametropoiisi ton states gia eukolotoeri katanoisi
             width_pulse = 4'b001,
@@ -31,6 +33,7 @@ begin
     hsync = 1;
     counter_enable = 1;
     enable_pixels = 0;   
+    h_disp_on = 0;
 
 
     case (current_state)
@@ -45,8 +48,7 @@ begin
 
         width_pulse:
         begin
-            hsync = 0;
-            
+            hsync = 0;          
             if(counter == 12'd383)      //prepei na to allazo ena piso dioti oi register pairnoun ena clk gia na allajoun timi
                 next_state = back_porch;
             else
@@ -64,6 +66,7 @@ begin
 
         display_time:
         begin
+            h_disp_on = 1;
             enable_pixels = 1;
             //counter_enable = 0;
             if(counter == 12'd3135)     // pali -1
