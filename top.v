@@ -34,7 +34,7 @@ always @ (vpixel or hpixel or v_disp_on or h_disp_on)
 begin
     if( (v_disp_on == 0) || (h_disp_on == 0) )
     begin
-        addr = 14'd12288;
+        addr = 14'd12290;   // timi ektos orismenis mnimis opoy einai R=G=B = 0
     end
     else
         addr = {vpixel, hpixel};

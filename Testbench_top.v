@@ -24,7 +24,10 @@ begin
     //fd = $fopen("C:\Users\jimar\Desktop\digital_lab\lab3\Lab3\colors.txt", "w");  
     #100 reset = 0;  
     //#1000 enable = 1;  
-    //#100000  $fclose(fd); 
+    //#100000  $fclose(fd);
+     
+    // #2912295 reset = 1;
+    // #10000 reset = 0;
 end
 
 // always @(addr)

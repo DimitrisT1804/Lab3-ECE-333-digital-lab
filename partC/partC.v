@@ -61,7 +61,9 @@ begin
         v_back_porch:
         begin
             vsync = 1;
-            if(counter == 21'd98623)
+            if(counter == 21'd98622)        /* ipologismeni timi gia na jekinaei to HSYNC kai na ftanei
+                                             mazi me to VSYNC sto display time. (exei ipologisthei kai i
+                                             kathisterisi apo ta flip flop logo registers) */
             //if(counter == 21'd99199)
             begin
                 next_state = signal_for_hsync;
@@ -108,7 +110,7 @@ begin
         default:
         begin
             next_state = v_off;
-            $display("To vsync mpike se default ERROR\n");
+            $display("To vsync mpike se default ERROR\n");  // prepei na vgei
         end
     endcase
 end
